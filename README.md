@@ -1,5 +1,5 @@
 # inQuba Journey Tracker
-This is the official GTM template for the inQuba customer journey management & customer experience (CX) platform. inQuba’s Journey Cloud offers a toolbox of cloud-based apps to help you optimize customer journeys and reinvent customer experiences.
+This is the official GTM template for the [inQuba customer journey management & customer experience (CX) platform](https://www.inquba.com). inQuba’s Journey Cloud offers a toolbox of cloud-based apps to help you optimize customer journeys and reinvent customer experiences.
 
 ## Documentation
 
