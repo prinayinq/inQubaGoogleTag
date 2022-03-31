@@ -15,5 +15,7 @@
 homepage: "https://www.inquba.com"
 documentation: "https://github.com/prinayinq/inQubaGoogleTag#readme"
 versions:
-  - sha: 5f02a788b90ae804f86b04aa24af8937e567874a
+  - sha: 6def40706753a09a3d661b957cc80ce12091290f
     changeNotes: Initial Version
+
+    
