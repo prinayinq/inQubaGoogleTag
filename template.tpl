@@ -3,7 +3,7 @@
 {
   "type": "TAG",
   "id": "cvt_temp_public_id",
-  "version": 1,
+  "version": 1.1,
   "securityGroups": [],
   "displayName": "inQuba Journey Tracker",
   "categories": [
