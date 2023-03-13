@@ -1,12 +1,4 @@
-﻿___TERMS_OF_SERVICE___
-
-By creating or modifying this file you agree to Google Tag Manager's Community
-Template Gallery Developer Terms of Service available at
-https://developers.google.com/tag-manager/gallery-tos (or such other URL as
-Google may provide), as modified from time to time.
-
-
-___INFO___
+﻿___INFO___
 
 {
   "type": "TAG",
@@ -14,7 +6,11 @@ ___INFO___
   "version": 1,
   "securityGroups": [],
   "displayName": "inQuba Journey Tracker",
-  "categories": ["ANALYTICS", "ATTRIBUTION", "PERSONALIZATION"],
+  "categories": [
+    "ANALYTICS",
+    "ATTRIBUTION",
+    "PERSONALIZATION"
+  ],
   "brand": {
     "id": "brand_dummy",
     "displayName": "InQuba",
@@ -75,7 +71,14 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "LABEL",
         "name": "idLabel",
-        "displayName": "Identifiers: use one or more of user ID, phone number or (hashed) email. Identifiers are only sent over https, if required, make sure to hash variables first."
+        "displayName": "Identifiers: use one or more of user ID, phone number or (hashed) email. Identifiers are hashed by default. Uncheck if you want to send plain text values."
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "hashIdentifiers",
+        "checkboxText": "Hash Identifiers",
+        "simpleValueType": true,
+        "defaultValue": true
       },
       {
         "type": "TEXT",
@@ -253,15 +256,32 @@ if(persistentId) {
   params = params + '&aid=' + encodeUriComponent(persistentId);
 }
 
+function sendWithParams() {
+  // Add identifiers if present
+  const uid = data.endUserId ? ("&uid=" + encodeUriComponent(data.endUserId)) : "";
+  const ph = data.endUserPhone ? ("&ph=" + encodeUriComponent(data.endUserPhone)) : "";
+  const em = data.endUserEmail ? ("&em=" + encodeUriComponent(data.endUserEmail)) : "";
 
-// Add identifiers if present
-const uid = data.endUserId ? ("&uid=" + encodeUriComponent(data.endUserId)) : "";
-const ph = data.endUserPhone ? ("&ph=" + encodeUriComponent(data.endUserPhone)) : "";
-const em = data.endUserEmail ? ("&em=" + encodeUriComponent(data.endUserEmail)) : "";
-params = params + uid + ph + em;
+  params = params + uid + ph + em;
 
-
-return sendPixel(endpoint + '?' + params, data.gtmOnSuccess, data.gtmOnFailure);
+  return sendPixel(endpoint + '?' + params, data.gtmOnSuccess, data.gtmOnFailure);
+}
+ 
+if (data.hashIdentifiers == true) {
+  // Ugly nested callbacks to hash values because GTM doesn't support proper ES6
+  sha256(data.endUserId || "", (digest) => {
+      data.endUserId = digest;
+        sha256(data.endUserPhone || "", (digest) => {
+          data.endUserPhone = digest;
+            sha256(data.endUserEmail || "", (digest) => {
+              data.endUserEmail = digest;
+              sendWithParams();
+            }, data.gtmOnFailure);
+        }, data.gtmOnFailure);
+    }, data.gtmOnFailure);
+} else {
+  sendWithParams();
+}
 
 
 ___WEB_PERMISSIONS___
